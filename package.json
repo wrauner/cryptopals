@@ -1,0 +1,28 @@
+{
+  "name": "wrauner-cryptopals",
+  "version": "1.0.0",
+  "description": "cryptopals challenges done in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha */**/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wrauner/cryptopals.git"
+  },
+  "keywords": [
+    "cryptopals",
+    "crypto",
+    "challenges"
+  ],
+  "author": "Wojciech Rauner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wrauner/cryptopals/issues"
+  },
+  "homepage": "https://github.com/wrauner/cryptopals#readme",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
