@@ -30,6 +30,22 @@ class XorBreaker {
     return result
   }
 
+  breakRepeatingXor(fileName) {
+    let data = fs.readFileSync(fileName, 'utf8')
+
+  }
+
+  findDistances(dataBuffer) {
+    let result = []
+    for(let keysize = 2; keysize<=40; keysize++) {
+      let firstSlice = dataBuffer.slice(0, keysize)
+      let secondSlice = dataBuffer.slice(keysize, 2*keysize)
+      let distance = xorUtils.distance(firstSlice, secondSlice)
+      result.push([keysize, distance])
+    }
+    return result.sort((a,b) => a[1]-b[1]).slice(0,3)
+  }
+
   /**
    * Rate string based on ascii characters
    * @param {Buffer} dataBuffer buffer containing data

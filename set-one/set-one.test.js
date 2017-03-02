@@ -54,4 +54,19 @@ describe('Set 1, Basic', () => {
       expect(xor_one).to.equal(result)
     })
   })
+  describe('Challenge 6, Break repeating-key XOR', () => {
+    it('Calculates Hamming distance correctly', () => {
+      let a = Buffer.from('this is a test')
+      let b = Buffer.from('wokka wokka!!!')
+
+      let distance = xorUtils.distance(a, b)
+      expect(distance).to.equal(37)
+    })
+    it('Calculates hamming distances', () => {
+      let data = Buffer.from('HUIfTQsPAh9PE048GmllH0kcDk4TAQsHThsBFkU2AB4BSWQgVB0dQzNTTmVS', 'base64')
+      let distances = xorBreaker.findDistances(data)
+
+      mlog.log(JSON.stringify(distances, undefined, 2))
+    })
+  })
 })
