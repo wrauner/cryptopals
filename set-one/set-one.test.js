@@ -35,7 +35,13 @@ describe('Set 1, Basic', () => {
     it('breaks single xor', () => {
       let test = Buffer.from('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736', 'hex')
       let result = xorBreaker.breakSingleXor(test)
-      mlog.log(JSON.stringify(result.slice(0, 3), undefined, 2))
+      mlog.log(JSON.stringify(result, undefined, 2))
+    })
+  })
+  describe('Challenge 4, Detect single-character XOR', () => {
+    it('detects and breaks single xor', () => {
+      let result = xorBreaker.breakSingleXorFile('./set-one/data/4.txt')
+      mlog.log(JSON.stringify(result, undefined, 2))
     })
   })
 })

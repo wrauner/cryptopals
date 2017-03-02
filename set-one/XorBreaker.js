@@ -1,7 +1,17 @@
 const englishFreq = require('./english-alphabet-freq')
 const xorUtils = require('./XorUtils')
+const fs = require('fs')
+const franc = require('franc')
 
 class XorBreaker {
+  breakSingleXorFile(fileName) {
+    let data = fs.readFileSync(fileName, 'utf8')
+    return data.split('\n')
+        .map(line => Buffer.from(line, 'hex'))
+        .map(buf => this.breakSingleXor(buf))
+        .reduce((a,b) => a.concat(b), [])
+  }
+
   /**
    * Breaks single character XOR on a buffer
    * based on frequency of letters in the english alphabet
@@ -13,13 +23,11 @@ class XorBreaker {
     for(let i=0; i<256; i++) {
       let char = Buffer.alloc(1).fill(i)
       let tryXor = xorUtils.xor(dataBuffer, char)
-      if(tryXor.every(letter => letter>31 && letter<127)) { //as a result we want a text
-        let frequency = this.calculateFrequency(tryXor)
-        let distance = this.calculateFreqDistance(frequency)
-        result.push([distance, char.toString('utf8'), tryXor.toString('utf8')])
+      if(tryXor.every(letter => letter>31 && letter<127) && franc(tryXor.toString('utf8')) === 'eng') {
+        result.push(tryXor.toString('utf8'))
       }
     }
-    return result.sort((a, b) => a[0]-b[0])
+    return result;
   }
 
   /**
