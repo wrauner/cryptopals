@@ -1,7 +1,6 @@
 const englishFreq = require('./english-alphabet-freq')
 const xorUtils = require('./XorUtils')
 const fs = require('fs')
-const franc = require('franc')
 
 class XorBreaker {
   breakSingleXorFile(fileName) {
@@ -9,7 +8,7 @@ class XorBreaker {
     return data.split('\n')
         .map(line => Buffer.from(line, 'hex'))
         .map(buf => this.breakSingleXor(buf))
-        .reduce((a,b) => a.concat(b), [])
+        .sort((a,b) => b[0]-a[0])[0]
   }
 
   /**
@@ -19,53 +18,30 @@ class XorBreaker {
    * @return {[]} array containing [distance, key(single character), recovered string]
    */
   breakSingleXor(dataBuffer) {
-    let result = [];
+    let result = [0, ''];
     for(let i=0; i<256; i++) {
       let char = Buffer.alloc(1).fill(i)
       let tryXor = xorUtils.xor(dataBuffer, char)
-      if(tryXor.every(letter => letter>31 && letter<127) && franc(tryXor.toString('utf8')) === 'eng') {
-        result.push(tryXor.toString('utf8'))
+      let score = this.rateString(tryXor)
+      if(result[0] < score) {
+        result = [score, tryXor.toString('utf8')]
       }
-    }
-    return result;
-  }
-
-  /**
-   * Calculates frequency of letters in string
-   * @param {Buffer} xoredBuffer buffer with data to calculate freq
-   * @return {object} object that contains uppercase letters as keys and frequency as params
-   */
-  calculateFrequency(xoredBuffer) {
-    let frequency = this.prepareEmptyFreq()
-    xoredBuffer.toString('utf8').toUpperCase().split('').forEach(letter => {
-      if(frequency[letter] !== undefined) {
-        frequency[letter] += 1/xoredBuffer.length
-      }
-    })
-    return frequency
-  }
-
-  /**
-   * Calculates euclidian distance
-   * of object, that contains frequency of letters in string
-   * from english alphabet frequency
-   * @param {object} frequency object that contains frequency of letters in a string
-   * @return {number} euclidian distance
-   */
-  calculateFreqDistance(frequency) {
-    let sum = 0;
-    for(let letter in frequency) {
-      sum += Math.pow(frequency[letter]-englishFreq[letter], 2)
-    }
-    return Math.sqrt(sum)
-  }
-
-  prepareEmptyFreq() {
-    let result = {};
-    for(let key in englishFreq) {
-      result[key] = 0
     }
     return result
+  }
+
+  /**
+   * Rate string based on ascii characters
+   * @param {Buffer} dataBuffer buffer containing data
+   * @return {number} score, higher = better
+   */
+  rateString(dataBuffer) {
+    let score = 0
+    dataBuffer.forEach(letter => {
+      if((letter>=65 && letter<=90) || (letter>=97 && letter <=122) || letter===32) score+=3
+      else if((letter>=33 && letter<=64) || (letter>=91 && letter<=96) || (letter>=123 && letter<=127)) score+=1
+    })
+    return score
   }
 }
 
