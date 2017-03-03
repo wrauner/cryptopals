@@ -54,7 +54,8 @@ describe('Set 1, Basic', () => {
       expect(xor_one).to.equal(result)
     })
   })
-  describe('Challenge 6, Break repeating-key XOR', () => {
+  describe('Challenge 6, Break repeating-key XOR', function() {
+    this.timeout(0)
     it('Calculates Hamming distance correctly', () => {
       let a = Buffer.from('this is a test')
       let b = Buffer.from('wokka wokka!!!')
@@ -62,11 +63,18 @@ describe('Set 1, Basic', () => {
       let distance = xorUtils.distance(a, b)
       expect(distance).to.equal(37)
     })
-    it('Calculates hamming distances', () => {
-      let data = Buffer.from('HUIfTQsPAh9PE048GmllH0kcDk4TAQsHThsBFkU2AB4BSWQgVB0dQzNTTmVS', 'base64')
-      let distances = xorBreaker.findDistances(data)
+    it('Transposes buffer into blocks', () => {
+      let data = Buffer.from('000102030405060708090A0B0C0D0E0F', 'hex')
+      let results = [Buffer.from('0004080C', 'hex'), Buffer.from('0105090D', 'hex'), Buffer.from('02060A0E', 'hex'), Buffer.from('03070B0F', 'hex')]
 
-      mlog.log(JSON.stringify(distances, undefined, 2))
+      let transposed = xorBreaker.transposeBuffer(data, 4)
+      expect(transposed).to.deep.equal(results)
+    })
+    it('Breaks repeating xor in file', () => {
+      let result = xorBreaker.breakRepeatingXor('./set-one/data/6.txt')
+
+      expect(result.key).to.equal('Terminator X: Bring the noise')
+      mlog.log(`Found key: ${result.key}`)
     })
   })
 })
