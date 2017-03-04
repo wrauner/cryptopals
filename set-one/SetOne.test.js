@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const mlog = require('mocha-logger')
 const xorUtils = require('./XorUtils')
 const xorBreaker = require('./XorBreaker')
+const aesUtils = require('./AESUtils')
 
 describe('Set 1, Basic', () => {
   describe('Challenge 1, Convert hex to base64', () => {
@@ -41,7 +42,7 @@ describe('Set 1, Basic', () => {
   })
   describe('Challenge 4, Detect single-character XOR', () => {
     it('detects and breaks single xor', () => {
-      let result = xorBreaker.breakSingleXorFile('./set-one/data/4.txt')
+      let result = xorBreaker.detectSingleXor('./set-one/data/4.txt')
       mlog.log(JSON.stringify(result[1], undefined, 2))
       expect(result[1]).to.equal("Now that the party is jumping\n")
     })
@@ -75,6 +76,12 @@ describe('Set 1, Basic', () => {
 
       expect(result.key).to.equal('Terminator X: Bring the noise')
       mlog.log(`Found key: ${result.key}`)
+    })
+  })
+  describe('Challenge 7, AES in ECB mode', () => {
+    it('Correctly decrypts AES ECB', () => {
+      let result = aesUtils.decryptFileECB('./set-one/data/7.txt', 'YELLOW SUBMARINE')
+      expect(result.startsWith("I'm back and I'm ringin' the bell")).to.be.true
     })
   })
 })

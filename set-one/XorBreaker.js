@@ -1,4 +1,3 @@
-const englishFreq = require('./english-alphabet-freq')
 const xorUtils = require('./XorUtils')
 const fs = require('fs')
 
