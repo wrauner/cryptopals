@@ -11,14 +11,14 @@ Code is written in ES2015, tests done using mocha and chai.
 
 ### Progress
 
-1. Basics &#9744;
-2. Block crypto &#9744;
-3. Block & stream crypto &#9744;
-4. Stream crypto & randomness &#9744;
-5. Diffie-Hellman and friends &#9744;
-6. RSA and RSA &#9744;
-7. Hashes &#9744;
-8. Abstract Algebra &#9744;
+1. &#9744; Basics 
+2. &#9744; Block crypto 
+3. &#9744; Block & stream crypto 
+4. &#9744; Stream crypto & randomness 
+5. &#9744; Diffie-Hellman and friends 
+6. &#9744; RSA and RSA 
+7. &#9744; Hashes 
+8. &#9744; Abstract Algebra 
 
 ### Run
 
