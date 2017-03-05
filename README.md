@@ -1,13 +1,21 @@
-# Cryptopals challenges
-## done in Node.js
+# Cryptopals challenges done in Node.js
+
+<img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.ai" width="100"/>
 
 In this repository you can find my answers to cryptopals crypto challenges. Challenges are available on [Cryptopals website](http://cryptopals.com/).
 
 Code is written in ES2015, tests done using mocha and chai.
 
+### How to run:
+
+```
+npm install
+npm test
+```
+
 ### Progress
 
-&#9745; Basics
+&#9989;  Basics
 
 &#9744; Block crypto
 
@@ -22,9 +30,3 @@ Code is written in ES2015, tests done using mocha and chai.
 &#9744; Hashes
 
 &#9744; Abstract Algebra 
-
-### Run
-
-```
-npm test
-```
