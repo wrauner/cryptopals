@@ -13,7 +13,7 @@ npm install
 npm test
 ```
 
-### Progress
+### Progress:
 
 &#9989;  Basics
 
