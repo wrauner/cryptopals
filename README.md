@@ -7,7 +7,7 @@ Code is written in ES2015, tests done using mocha and chai.
 
 ### Progress
 
-&#9744; Basics
+&#9745; Basics
 
 &#9744; Block crypto
 

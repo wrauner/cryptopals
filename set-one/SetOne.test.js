@@ -81,7 +81,15 @@ describe('Set 1, Basic', () => {
   describe('Challenge 7, AES in ECB mode', () => {
     it('Correctly decrypts AES ECB', () => {
       let result = aesUtils.decryptFileECB('./set-one/data/7.txt', 'YELLOW SUBMARINE')
+      mlog.log(`First 30 chars of decrypted text: ${result.slice(0, 30)}`)
       expect(result.startsWith("I'm back and I'm ringin' the bell")).to.be.true
+    })
+  })
+  describe('Challenge 8, Detect AES in ECB mode', () => {
+    it('Detects AES in ECB mode in file', () => {
+      let result = aesUtils.detectAESFile('./set-one/data/8.txt')
+      mlog.log(`AES ECB encryption found in row ${result}`)
+      expect(result).not.to.equal(-1)
     })
   })
 })
