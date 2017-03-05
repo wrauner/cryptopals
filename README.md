@@ -1,6 +1,6 @@
 # Cryptopals challenges done in Node.js
 
-<img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.ai" width="100"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Node.js_logo_2015.svg" width="200"/>
 
 In this repository you can find my answers to cryptopals crypto challenges. Challenges are available on [Cryptopals website](http://cryptopals.com/).
 
