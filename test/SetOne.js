@@ -1,8 +1,8 @@
 const expect = require('chai').expect
 const mlog = require('mocha-logger')
-const xorUtils = require('./XorUtils')
-const xorBreaker = require('./XorBreaker')
-const aesUtils = require('./AESUtils')
+const xorUtils = require('../set-one/XorUtils')
+const xorBreaker = require('../set-one/XorBreaker')
+const aesUtils = require('../set-one/AESUtils')
 
 describe('Set 1, Basic', () => {
   describe('Challenge 1, Convert hex to base64', () => {
