@@ -1,8 +1,8 @@
 const expect = require('chai').expect
 const mlog = require('mocha-logger')
-const xorUtils = require('../set-one/XorUtils')
-const xorBreaker = require('../set-one/XorBreaker')
-const aesUtils = require('../set-one/AESUtils')
+const xorUtils = require('../src/XorUtils')
+const xorBreaker = require('../src/XorBreaker')
+const aesUtils = require('../src/AESUtils')
 
 describe('Set 1, Basic', () => {
   describe('Challenge 1, Convert hex to base64', () => {
@@ -42,7 +42,7 @@ describe('Set 1, Basic', () => {
   })
   describe('Challenge 4, Detect single-character XOR', () => {
     it('detects and breaks single xor', () => {
-      let result = xorBreaker.detectSingleXor('./set-one/data/4.txt')
+      let result = xorBreaker.detectSingleXor('./data/4.txt')
       mlog.log(JSON.stringify(result[1], undefined, 2))
       expect(result[1]).to.equal("Now that the party is jumping\n")
     })
@@ -72,7 +72,7 @@ describe('Set 1, Basic', () => {
       expect(transposed).to.deep.equal(results)
     })
     it('Breaks repeating xor in file', () => {
-      let result = xorBreaker.breakRepeatingXor('./set-one/data/6.txt')
+      let result = xorBreaker.breakRepeatingXor('./data/6.txt')
 
       expect(result.key).to.equal('Terminator X: Bring the noise')
       mlog.log(`Found key: ${result.key}`)
@@ -80,14 +80,14 @@ describe('Set 1, Basic', () => {
   })
   describe('Challenge 7, AES in ECB mode', () => {
     it('Correctly decrypts AES ECB', () => {
-      let result = aesUtils.decryptFileECB('./set-one/data/7.txt', 'YELLOW SUBMARINE')
+      let result = aesUtils.decryptFileECB('./data/7.txt', 'YELLOW SUBMARINE')
       mlog.log(`First 30 chars of decrypted text: ${result.slice(0, 30)}`)
       expect(result.startsWith("I'm back and I'm ringin' the bell")).to.be.true
     })
   })
   describe('Challenge 8, Detect AES in ECB mode', () => {
     it('Detects AES in ECB mode in file', () => {
-      let result = aesUtils.detectAESFile('./set-one/data/8.txt')
+      let result = aesUtils.detectAESFile('./data/8.txt')
       mlog.log(`AES ECB encryption found in row ${result}`)
       expect(result).not.to.equal(-1)
     })

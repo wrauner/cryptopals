@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const pkcsUtils = require('../set-two/PkcsUtils')
+const pkcsUtils = require('../src/PkcsUtils')
 const mlog = require('mocha-logger')
 
 describe('Set 2, Block crypto', () => {
