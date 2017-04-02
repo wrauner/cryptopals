@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const pkcsUtils = require('../src/PkcsUtils')
 const aesUtils = require('../src/AESUtils')
+const encryptionOracle = require('../src/EncryptionOracle')
 const mlog = require('mocha-logger')
 const fs = require('fs')
 
@@ -33,6 +34,13 @@ describe('Set 2, Block crypto', () => {
       let decrypted = aesUtils.decryptFileCBC(filename, testKey, testiv).toString()
        mlog.log(`First 30 chars of decrypted text: ${decrypted.slice(0, 30)}`)
       expect(decrypted.startsWith("I'm back and I'm ringin' the bell")).to.be.true
+    })
+  })
+  describe('Challenge 11, An ECB/CBC detection oracle', () => {
+    it('should detect cipher mode of operation', () => {
+      let guessRate = encryptionOracle.detectEncryptionMode(10)
+      mlog.log(`Encryption oracle guess rate ${guessRate*100}%`)
+      expect(guessRate).to.be.greaterThan(0.9)
     })
   })
 })

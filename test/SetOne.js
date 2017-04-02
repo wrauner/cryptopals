@@ -87,7 +87,7 @@ describe('Set 1, Basic', () => {
   })
   describe('Challenge 8, Detect AES in ECB mode', () => {
     it('Detects AES in ECB mode in file', () => {
-      let result = aesUtils.detectAESFile('./data/8.txt')
+      let result = aesUtils.detectECBFile('./data/8.txt')
       mlog.log(`AES ECB encryption found in row ${result}`)
       expect(result).not.to.equal(-1)
     })

@@ -25,14 +25,18 @@ class AESUtils {
    * @param {string} fileName fileName
    * @return {number} number of line that is encrypted with AES ECB
    */
-  detectAESFile(fileName) {
+  detectECBFile(fileName) {
     let data = fs.readFileSync(fileName, 'utf8')
     let rows = data.split('\n')
     let index = -1;
     for(let i=0, len=rows.length; i<len; i++) {
-      if(this._detectAESRow(rows[i])) index = i;
+      if(this._detectECBRow(rows[i])) index = i;
     }
     return index;
+  }
+
+  detectECBBuffer(input) {
+    return this._detectECBRow(input)
   }
 
   /**
@@ -40,7 +44,7 @@ class AESUtils {
    * @param {string} row posisbly encrypted string
    * @return {boolean} if the line is AES ECB enc or not
    */
-  _detectAESRow(row) {
+  _detectECBRow(row) {
     let rowLength = row.length
     for(let j=0, len=rowLength/16-1; j<len; j++) {
       let start = j*16;
@@ -69,6 +73,15 @@ class AESUtils {
       let encryptedBlock = this._encryptBlockAES(combinedData, key)
       encryptedData.push(encryptedBlock)
       previousChunk = encryptedBlock
+    }
+    return Buffer.concat(encryptedData)
+  }
+
+  encryptECB(data, key) {
+    let chunkedData = this._chunkData(data, 16)
+    let encryptedData = []
+    for(let i=0, len = chunkedData.length; i<len; i++) {
+      encryptedData.push(this._encryptBlockAES(chunkedData[i], key))
     }
     return Buffer.concat(encryptedData)
   }
