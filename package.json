@@ -4,7 +4,7 @@
   "description": "cryptopals challenges done in Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --no-timeouts"
   },
   "repository": {
     "type": "git",

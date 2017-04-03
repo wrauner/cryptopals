@@ -3,6 +3,14 @@ const crypto = require('crypto')
 
 class EncryptionOracle {
 
+  constructor() {
+    this._ecbKey = crypto.randomBytes(16) //usage in challenge 12
+    this._prefix = Buffer.from(`Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg
+    aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq
+    dXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUg
+    YnkK`, 'base64')
+  }
+
   /**
    * Encrypts data using ECB or CBC
    * with random key, random iv etc
@@ -25,6 +33,20 @@ class EncryptionOracle {
     } else {
       return AESUtils.encryptECB(data, randomKey)
     }
+  }
+
+  /**
+   * Encrypts data using AES-ECB with constant
+   * key, generated randomly during class initialization
+   * appends prefix string before encrypting
+   * @param {Buffer} data to encrypt
+   * @return {Buffer} encrypted data
+   */
+  encryptECB(data) {
+    if(!Buffer.isBuffer(data)) {
+      data = Buffer.from(data)
+    }
+    return AESUtils.encryptECB(Buffer.concat([data, this._prefix]), this._ecbKey)
   }
 
   /**

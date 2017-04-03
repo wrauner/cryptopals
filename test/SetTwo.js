@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const pkcsUtils = require('../src/PkcsUtils')
 const aesUtils = require('../src/AESUtils')
 const encryptionOracle = require('../src/EncryptionOracle')
+const ecbDecryptor = require('../src/ECBDecryptor')
 const mlog = require('mocha-logger')
 const fs = require('fs')
 
@@ -42,6 +43,21 @@ describe('Set 2, Block crypto', () => {
       let encryptedData = encryptionOracle.encrypt(testData)
       let guess = encryptionOracle.detectEncryptionMode(encryptedData)
       mlog.log(`Detected encryption mode: ${guess}`)
+    })
+  })
+  describe('Challenge 12, Byte-at-a-time ECB decryption', () => {
+    it('should encrypt correctly', () => {
+      let encryptedData = encryptionOracle.encryptECB('test')
+      expect(encryptedData).not.to.deep.equal(Buffer.alloc(0))
+    })
+    it('should detect cipher block size', () => {
+      let cipherBlocksize = ecbDecryptor.findBlocksize()
+      expect(cipherBlocksize).to.equal(16)
+    })
+    it('should break ECB', () => {
+      let plaintext = ecbDecryptor.breakECB()
+      mlog.log(plaintext)
+      expect(plaintext).to.not.be.empty
     })
   })
 })
