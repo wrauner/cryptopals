@@ -8,7 +8,7 @@ class EncryptionOracle {
    * with random key, random iv etc
    * pads data with 5-10 random bytes
    * @param {object} input 
-   * @return {object} object containing data buffer and mode of encryption
+   * @return {Buffer} encrypted data
    */
   encrypt(input) {
     if (!Buffer.isBuffer(input)) {
@@ -21,34 +21,21 @@ class EncryptionOracle {
     let data = Buffer.concat([randomPad, input, randomPad])
     if (isCBC) {
       let randomIV = crypto.randomBytes(16)
-      return {
-        data: AESUtils.encryptCBC(data, randomKey, randomIV),
-        mode: 'CBC'
-      }
+      return AESUtils.encryptCBC(data, randomKey, randomIV)
     } else {
-      return {
-        data: AESUtils.encryptECB(data, randomKey),
-        mode: 'ECB'
-      }
+      return AESUtils.encryptECB(data, randomKey)
     }
   }
 
   /**
    * Detects encryption mode
-   * @param {number} probes try hard
    * @return {number} success rate
    */
-  detectEncryptionMode(probes) {
-    let results = 0
-    for (let j = 0; j < probes; j++) {
-      let encrypted = this.encrypt(this._prepareInput())
-      let guess = AESUtils.detectECBBuffer(encrypted.data) ? 'ECB' : 'CBC'
-      if (guess === encrypted.mode) results += 1
-    }
-    return results/probes
+  detectEncryptionMode(encryptedData) {
+    return AESUtils.detectECBBuffer(encryptedData) ? 'ECB' : 'CBC'
   }
 
-  _prepareInput() {
+  prepareInput() {
     let testData = 'test'
     for (let i = 0; i < 20; i++) {
       testData += 'test'

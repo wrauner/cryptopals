@@ -38,9 +38,10 @@ describe('Set 2, Block crypto', () => {
   })
   describe('Challenge 11, An ECB/CBC detection oracle', () => {
     it('should detect cipher mode of operation', () => {
-      let guessRate = encryptionOracle.detectEncryptionMode(10)
-      mlog.log(`Encryption oracle guess rate ${guessRate*100}%`)
-      expect(guessRate).to.be.greaterThan(0.9)
+      let testData = encryptionOracle.prepareInput()
+      let encryptedData = encryptionOracle.encrypt(testData)
+      let guess = encryptionOracle.detectEncryptionMode(encryptedData)
+      mlog.log(`Detected encryption mode: ${guess}`)
     })
   })
 })
