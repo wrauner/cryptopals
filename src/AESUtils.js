@@ -14,10 +14,7 @@ class AESUtils {
   decryptFileECB(fileName, pass) {
     let data = fs.readFileSync(fileName, 'utf8').replace('\n', '')
     let dataBuffer = Buffer.from(data, 'base64')
-    let decrypt = crypto.createDecipheriv('aes-128-ecb', pass, Buffer.alloc(0))
-    decrypt.setAutoPadding(false)
-    let decrypted = Buffer.concat([decrypt.update(dataBuffer), decrypt.final()])
-    return decrypted.toString('utf8')
+    return this.decryptECB(dataBuffer, pass)
   }
 
   /**
@@ -78,12 +75,25 @@ class AESUtils {
   }
 
   encryptECB(data, key) {
+    if(!Buffer.isBuffer(data)) {
+      data = Buffer.from(data)
+    }
     let chunkedData = this._chunkData(data, 16)
     let encryptedData = []
     for(let i=0, len = chunkedData.length; i<len; i++) {
       encryptedData.push(this._encryptBlockAES(chunkedData[i], key))
     }
     return Buffer.concat(encryptedData)
+  }
+
+  decryptECB(data, key) {
+    if(!Buffer.isBuffer(key)) {
+      key = Buffer.from(key)
+    }
+    let decrypt = crypto.createDecipheriv('aes-128-ecb', key, Buffer.alloc(0))
+    decrypt.setAutoPadding(false)
+    let decrypted = Buffer.concat([decrypt.update(data), decrypt.final()])
+    return decrypted.toString('utf8')
   }
 
   /**

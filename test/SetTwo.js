@@ -3,6 +3,7 @@ const pkcsUtils = require('../src/PkcsUtils')
 const aesUtils = require('../src/AESUtils')
 const encryptionOracle = require('../src/EncryptionOracle')
 const ecbDecryptor = require('../src/ECBDecryptor')
+const profileCookieGenerator = require('../src/ProfileCookieGenerator')
 const mlog = require('mocha-logger')
 const fs = require('fs')
 
@@ -33,7 +34,7 @@ describe('Set 2, Block crypto', () => {
       let filename = './data/10.txt'
 
       let decrypted = aesUtils.decryptFileCBC(filename, testKey, testiv).toString()
-       mlog.log(`First 30 chars of decrypted text: ${decrypted.slice(0, 30)}`)
+      mlog.log(`First 30 chars of decrypted text: ${decrypted.slice(0, 30)}`)
       expect(decrypted.startsWith("I'm back and I'm ringin' the bell")).to.be.true
     })
   })
@@ -58,6 +59,30 @@ describe('Set 2, Block crypto', () => {
       let plaintext = ecbDecryptor.breakECB()
       mlog.log(plaintext)
       expect(plaintext).to.not.be.empty
+    })
+  })
+  describe('Challenge 13, ECB cut-and-paste', () => {
+    it('should convert url to json', () => {
+      let testData = 'foo=bar&baz=qux&zap=zazzle'
+      let result = profileCookieGenerator.urlParams2JSON(testData)
+      expect(result).to.has.property('foo', 'bar')
+      expect(result).to.has.property('baz', 'qux')
+      expect(result).to.has.property('zap', 'zazzle')
+    })
+    it('should convert json to url params', () => {
+      let testData = {
+        email: 'foo@bar.com',
+        uid: 10,
+        role: 'user'
+      }
+      let result = profileCookieGenerator.json2urlParams(testData)
+      expect(result).to.equal('email=foo@bar.com&uid=10&role=user')
+    })
+    it('should encrypt cookie', () => {
+      let result = profileCookieGenerator.profileFor('test@test.pl')
+      expect(result).to.not.be.empty;
+      let decryptedResult = profileCookieGenerator.parseProfile(result)
+      expect(decryptedResult).to.have.property('email', 'test@test.pl')
     })
   })
 })
