@@ -90,9 +90,7 @@ class AESUtils {
     if(!Buffer.isBuffer(key)) {
       key = Buffer.from(key)
     }
-    let decrypt = crypto.createDecipheriv('aes-128-ecb', key, Buffer.alloc(0))
-    decrypt.setAutoPadding(false)
-    let decrypted = Buffer.concat([decrypt.update(data), decrypt.final()])
+    let decrypted = this._decryptBlockAES(data, key)
     return decrypted.toString('utf8')
   }
 
@@ -151,7 +149,7 @@ class AESUtils {
   _encryptBlockAES(block, key) {
     let cipher = crypto.createCipheriv('aes-128-ecb', key, Buffer.alloc(0))
     cipher.setAutoPadding(false)
-    return Buffer.concat([cipher.update(block), cipher.final()])
+    return Buffer.concat([cipher.update(pkcsUtils.pad(block, 16)), cipher.final()])
   }
 
   /**
@@ -166,7 +164,7 @@ class AESUtils {
     //why? not sure
     let decipher = crypto.createDecipheriv('aes-128-ecb', key, Buffer.alloc(0))
     decipher.setAutoPadding(false)
-    return Buffer.concat([decipher.update(block), decipher.final()])
+    return pkcsUtils.trim(Buffer.concat([decipher.update(block), decipher.final()]))
   }
 }
 

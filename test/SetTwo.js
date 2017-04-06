@@ -4,6 +4,7 @@ const aesUtils = require('../src/AESUtils')
 const encryptionOracle = require('../src/EncryptionOracle')
 const ecbDecryptor = require('../src/ECBDecryptor')
 const profileCookieGenerator = require('../src/ProfileCookieGenerator')
+const profileCookieSpoofer = require('../src/ProfileCookieSpoofer')
 const mlog = require('mocha-logger')
 const fs = require('fs')
 
@@ -83,6 +84,15 @@ describe('Set 2, Block crypto', () => {
       expect(result).to.not.be.empty;
       let decryptedResult = profileCookieGenerator.parseProfile(result)
       expect(decryptedResult).to.have.property('email', 'test@test.pl')
+    })
+    it('should probe for block size and test vector size', () => {
+      let probe = profileCookieSpoofer.probeCookieGenerator()
+      expect(probe.blockSize).to.equal(16)
+    })
+    it('should produce fake profile cookie', ()=> {
+      let fakeCookie = profileCookieSpoofer.produceAdminCookie()
+      let parsedFakeCookie = profileCookieGenerator.parseProfile(fakeCookie)
+      expect(parsedFakeCookie).to.have.property('role', 'admin')
     })
   })
 })
